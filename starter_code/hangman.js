@@ -1,7 +1,7 @@
 var hangman;
 
 function Hangman() {
-  this.words = ["brazil", "spain", "germany"];
+  this.words = ["sweden", "brazil", "spain", "germany"];
   this.secretWord = "";
   this.letters = [];
   this.guessedLetter = "";
@@ -29,7 +29,11 @@ Hangman.prototype._checkClickedLetters = function(key) {
 Hangman.prototype._addCorrectLetter = function(key) {
   if (this.secretWord.includes(key)) {
     console.log(`${key} is part of the secret word`);
-    this.guessedLetter += key;
+    for (let ix = 0; ix < hangman.secretWord.length; ix++) {
+      if (hangman.secretWord[ix] === key) {
+        this.guessedLetter += key;
+      }
+    }
     if (this._checkWinner()) {
       console.log(this.messages.win);
     }
@@ -73,15 +77,17 @@ document.getElementById("start-game-button").onclick = function() {
 
 document.onkeydown = function(e) {
   if (hangman != undefined) {
+    // Check if char is a valid alpha char.
     if (hangman._checkIfLetter(e.keyCode)) {
+      // Check if we already
       if (hangman._checkClickedLetters(e.key)) {
-        hangman.letters.push(e.key);
         hangman._addCorrectLetter(e.key);
+        hangman.letters.push(e.key);
       } else {
         console.log(hangman.messages.guessed);
       }
-    } else {
-      console.log(hangman.messages.notValidLetter);
     }
+  } else {
+    console.log(hangman.messages.notValidLetter);
   }
 };
