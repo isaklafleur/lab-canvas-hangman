@@ -15,7 +15,10 @@ function Hangman() {
 }
 
 Hangman.prototype._getWord = function() {
-  return this.words[Math.floor(Math.random() * this.words.length)];
+  button.innerHTML = "Game is On!";
+  const secretWord = this.words[Math.floor(Math.random() * this.words.length)];
+  console.log(secretWord);
+  return secretWord;
 };
 
 Hangman.prototype._checkIfLetter = function(keyCode) {
@@ -77,8 +80,6 @@ const button = document.getElementById("start-game-button");
 button.onclick = function() {
   hangman = new Hangman();
   hangman.secretWord = hangman._getWord();
-  console.log(hangman.secretWord);
-  button.innerHTML = "Game is On!";
 };
 
 document.onkeydown = function(e) {
