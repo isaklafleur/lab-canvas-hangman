@@ -5,10 +5,10 @@ function Hangman() {
   this.secretWord = "";
   this.letters = [];
   this.guessedLetter = "";
-  this.errorsLeft = 5;
+  this.errorsLeft = 2;
   this.messages = {
-    win: "You won!",
-    loose: "Game over!",
+    win: "You Win!",
+    loose: "Game Over!",
     guessed: "You already guessed this letter, please try again..",
     notValidLetter: "Please enter a valid letter from a-z",
   };
@@ -27,6 +27,7 @@ Hangman.prototype._checkClickedLetters = function(key) {
 };
 
 Hangman.prototype._addCorrectLetter = function(key) {
+  hangman.letters.push(key);
   if (this.secretWord.includes(key)) {
     console.log(`${key} is part of the secret word`);
     for (let ix = 0; ix < hangman.secretWord.length; ix++) {
@@ -36,12 +37,16 @@ Hangman.prototype._addCorrectLetter = function(key) {
     }
     if (this._checkWinner()) {
       console.log(this.messages.win);
+      button.innerHTML = "You Win! Play again?";
+      hangman = new Hangman();
+      hangman._getWord();
     }
   } else {
     console.log(`${key} is NOT part of the secret word`);
     this._addWrongLetter();
     if (this._checkGameOver()) {
       console.log(this.messages.loose);
+      button.innerHTML = "Play again?";
     }
   }
 };
@@ -68,11 +73,12 @@ Hangman.prototype._checkWinner = function() {
       .join("")
   );
 };
-
-document.getElementById("start-game-button").onclick = function() {
+const button = document.getElementById("start-game-button");
+button.onclick = function() {
   hangman = new Hangman();
   hangman.secretWord = hangman._getWord();
   console.log(hangman.secretWord);
+  button.innerHTML = "Game is On!";
 };
 
 document.onkeydown = function(e) {
@@ -82,7 +88,6 @@ document.onkeydown = function(e) {
       // Check if we already
       if (hangman._checkClickedLetters(e.key)) {
         hangman._addCorrectLetter(e.key);
-        hangman.letters.push(e.key);
       } else {
         console.log(hangman.messages.guessed);
       }
